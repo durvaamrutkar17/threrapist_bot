@@ -13,6 +13,10 @@ app = Flask(__name__)
 CORS(app)
 
 # Set OpenAI API key (legacy style)
+# NOTE: For newer OpenAI library versions (>=1.0.0), you would initialize a client:
+# from openai import OpenAI
+# client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# But for the provided code's "openai.ChatCompletion.create" syntax, this is correct.
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # System prompt for Empathy Bot
@@ -50,8 +54,9 @@ def chat():
     messages = [{"role": "system", "content": SYSTEM_PROMPT}] + history
 
     try:
+        # Using the legacy `openai.ChatCompletion.create`
         response = openai.ChatCompletion.create(
-            model="gpt-4",  # or "gpt-3.5-turbo" if needed
+            model="gpt-4",  # or "gpt-3.5-turbo"
             messages=messages,
             temperature=0.7,
             max_tokens=data.get("max_tokens", 500)
